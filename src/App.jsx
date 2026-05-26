@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import "./App.css";
 
-const API = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const API = (import.meta.env.VITE_API_URL || "http://localhost:8000").replace(/\/+$/, "");
 
 // Gatito SVG dibujado a mano, con partes animadas por CSS
 function CatSVG({ happy }) {
@@ -118,7 +118,7 @@ export default function TodoApp() {
     async function cargarTareas() {
       try {
         setCargando(true);
-        const res = await fetch(`${API}/tareas`);
+        const res = await fetch(`${API}/tareas/`);
         if (!res.ok) throw new Error("No se pudo conectar a la API");
         setTareas(await res.json());
         setError(null);
@@ -141,7 +141,7 @@ export default function TodoApp() {
     if (!titulo.trim()) return;
     setEnviando(true);
     try {
-      const res = await fetch(`${API}/tareas`, {
+      const res = await fetch(`${API}/tareas/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ titulo: titulo.trim(), descripcion: descripcion.trim() || null }),
